@@ -3,16 +3,24 @@ import { useEffect } from 'react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import InfiniteScroll from "react-infinite-scroll-component"
+import { useDispatch, useSelector } from 'react-redux'
+
 
 import Styles from './style.module.css'
+import { getData } from '../Redux/action'
+
 
 const Home = () => {
     const [product , setProduct] = useState([])
 
+    const data = useSelector(state=>state.data)
+
+    const disatch = useDispatch()
+
     //function which fetch the data from API
 
     const getProduct =  async () =>{
-        let data = await fetch("https://fakestoreapi.com/products")
+        let data = await fetch("https://ratnesh-softsensorai-project.herokuapp.com/product")
         data = await data.json()
         setProduct(data)
     }
@@ -26,14 +34,14 @@ const Home = () => {
     //function to implement infinite scroll
 
     const moreData = async () =>{
-        let data = await fetch("https://fakestoreapi.com/products")
+        let data = await fetch("https://ratnesh-softsensorai-project.herokuapp.com/product")
         data = await data.json()
 
         //time interval after data load again
 
         setTimeout(() => {
             setProduct(product.concat(data))
-        },2500);
+        },1500);
     }
 
     //calling the function inside useeffect
@@ -46,8 +54,9 @@ const Home = () => {
 
 
     const handleClick = (data) =>{
-        console.log(data)
+        disatch(getData(data))
     }
+
     
   return (
     <div>
